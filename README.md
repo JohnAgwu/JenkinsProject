@@ -1,4 +1,4 @@
-# Create EC2 nodes using custm module 
+# Create EC2 nodes using custom module 
 
 ## ensure you create a bucket to store the state file 
 ### dev infrastructure creation 

@@ -1,14 +1,24 @@
 module "first-machine" {
-    source = "../techbleat-module"
-    node_name = var.node1
+  source         = "../my-module"
+  node_name      = var.node1
+  sg_name        = var.node1-sg-name
+  ingress_port_1 = var.node1-port-1
+  ingress_port_2 = var.node1-port-2
 }
 module "second-machine" {
-    source = "../techbleat-module"
-    node_name = var.node2
+  source         = "../my-module"
+  node_name      = var.node2
+  sg_name        = var.node2-sg-name
+  ingress_port_1 = var.node2-port-1
+  ingress_port_2 = var.node2-port-2
 }
-variable "node1" {}
-variable "node2" {}
-
+module "third-machine" {
+  source         = "../my-module"
+  node_name      = var.node3
+  sg_name        = var.node3-sg-name
+  ingress_port_1 = var.node3-port-1
+  ingress_port_2 = var.node3-port-2
+}
 
 
 
