@@ -50,7 +50,7 @@ pipeline {
                         sh """
                         env
                         cd dev
-                        ssh -o StrictHostKeyChecking=no -i ec2-user@${NGINX_NODE2} 'pwd'
+                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'pwd'
                        
                         """
                     }
