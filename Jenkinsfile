@@ -39,5 +39,23 @@ pipeline {
                 '''
             }
         }
+
+        stage('Manage Nginx') {
+            environment {
+                NGINX_NODE2 = sh(script: "cd dev; terraform output  |  grep nginx_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
+            }
+            steps {
+                script {
+                    sshagent (credentials : ['SSH-TO-TERRA-Nodes']) {
+                        sh """
+                        env
+                        cd dev
+                        ssh -o StrictHostKeyChecking=no -i ec2-user@${NGINX_NODE2} 'pwd'
+                       
+                        """
+                    }
+                }
+            }
+        }
     }
 }
