@@ -3,6 +3,7 @@ resource "aws_instance" "app_node" {
     instance_type = "t2.micro"
     vpc_security_group_ids = [aws_security_group.some-rule.id]
     subnet_id     = aws_subnet.main_subnet.id
+    key_name = "jonag"
 
     tags = {
         Name  = var.node_name
