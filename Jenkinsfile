@@ -51,7 +51,6 @@ pipeline {
                         env
                         cd dev
                         ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'sudo yum update -y && sudo yum install git -y && sudo yum install nginx -y && sudo systemctl start nginx && sudo systemctl enable nginx'
-                        curl -I http://${NGINX_NODE2}
                         """
                     }
                 }
