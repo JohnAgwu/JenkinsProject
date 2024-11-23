@@ -50,7 +50,7 @@ pipeline {
                         sh """
                         env
                         cd dev
-                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} << 'EOF'
+                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} <<EOF
                             sudo yum update -y
                             sudo yum install git -y
                             sudo yum install nginx -y
