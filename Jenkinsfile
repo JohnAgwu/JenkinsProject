@@ -56,5 +56,23 @@ pipeline {
                 }
             }
         }
+
+        stage('Manage Python') {
+            environment {
+                PYTHON_NODE = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
+            }
+            steps {
+                script {
+                    sshagent (credentials : ['SSH-TO-TERRA-Nodes']) {
+                        sh """
+                        env
+                        cd dev
+                        ssh -o StrictHostKeyChecking=no ec2-user@${PYTHON_NODE} 'sudo yum update -y && sudo yum install python3 -y'
+                        scp -o StrictHostKeyChecking=no hello.py ec2-user@${PYTHON_NODE}:/tmp/hello.py
+                        """
+                    }
+                }
+            }
+        }
     }
 }
