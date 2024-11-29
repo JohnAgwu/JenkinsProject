@@ -124,12 +124,6 @@ pipeline {
                 }
             }
         }
-
-        stage ('Notification') {
-            steps {
-                
-            }
-        } 
     
 
         // stage('Terraform Destroy') {
