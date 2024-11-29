@@ -145,7 +145,7 @@ pipeline {
                     curl -X POST \
                     -H 'Authorization: Bearer ${SLACK_ID}' \
                     -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Pipeline successful, Onto the next!"}'  \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline successful, Onto the next!"}'  \
                     https://slack.com//api/chat.postMessage 
                     """    
                 }
@@ -159,7 +159,7 @@ pipeline {
                     curl -X POST \
                     -H 'Authorization: Bearer ${SLACK_ID}' \
                     -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Pipeline failed, Debug!!"}'  \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline failed, Debug!!"}'  \
                     https://slack.com//api/chat.postMessage 
                     """    
                 }
