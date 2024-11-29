@@ -126,14 +126,14 @@ pipeline {
         }
     
 
-        // stage('Terraform Destroy') {
-        //     steps {
-        //         sh '''
-        //         cd dev
-        //         terraform destroy -var-file=$TFVARS_FILE -auto-approve
-        //         '''
-        //     }
-        // }
+        stage('Terraform Destroy') {
+            steps {
+                sh '''
+                cd dev
+                terraform destroy -var-file=$TFVARS_FILE -auto-approve
+                '''
+            }
+        }
     }
 
     post {
