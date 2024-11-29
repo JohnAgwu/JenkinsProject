@@ -105,22 +105,39 @@ pipeline {
             }
         }
 
-        stage ('Notification') {
+        stage('Run Tests') {
+            when {
+                expression { params.DEPLOY_OPTIONS == 'APPS' || params.DEPLOY_OPTIONS == 'ALL' }
+            }
             steps {
                 script {
-                    withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-
+                    sshagent (credentials: ['SSH-TO-TERRA-Nodes']) {
                         sh """
-                          curl -X POST \
-                          -H 'Authorization: Bearer ${SLACK_ID}' \
-                          -H 'Content-Type: application/json' \
-                          --data '{"channel": "devops-masterclass-2024","text" : "testing out format and validate pipeline stage. if you see this then the stage worked. not yet implemented post successfailure though"}'  \
-                          https://slack.com//api/chat.postMessage 
+                        env
+                        cd dev
+                        ssh -o StrictHostKeyChecking=no ec2-user@${PYTHON_NODE} 'sudo yum install -y python3-pip && pip3 install pytest && pytest /tmp/hello.py'
                         """
                     }
                 }
             }
-        } 
+        }
+
+        // stage ('Notification') {
+        //     steps {
+        //         script {
+        //             withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+
+        //                 sh """
+        //                   curl -X POST \
+        //                   -H 'Authorization: Bearer ${SLACK_ID}' \
+        //                   -H 'Content-Type: application/json' \
+        //                   --data '{"channel": "devops-masterclass-2024","text" : "testing out format and validate pipeline stage. if you see this then the stage worked. not yet implemented post successfailure though"}'  \
+        //                   https://slack.com//api/chat.postMessage 
+        //                 """
+        //             }
+        //         }
+        //     }
+        // } 
     
 
         // stage('Terraform Destroy') {
