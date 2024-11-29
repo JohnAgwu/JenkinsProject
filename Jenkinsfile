@@ -114,7 +114,7 @@ pipeline {
                           curl -X POST \
                           -H 'Authorization: Bearer ${SLACK_ID}' \
                           -H 'Content-Type: application/json' \
-                          --data '{"channel": "devops-masterclass-2024","text" : "testing out John's format and validate pipeline stage. if you see this then the stage worked. not yet implemented post success/failure though"}'  \
+                          --data '{"channel": "devops-masterclass-2024","text" : "testing out format and validate pipeline stage. if you see this then the stage worked. not yet implemented post successfailure though"}'  \
                           https://slack.com//api/chat.postMessage 
                         """
                     }
