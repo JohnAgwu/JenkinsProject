@@ -5,6 +5,10 @@ pipeline {
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         TFVARS_FILE = credentials('DEV_TFVARS')
     }
+
+    parameters {
+        choice (choices: "ALL\nINFRA\nAPPS", description: " this is to manage pipeline steps", name: "DEPLOY_OPTIONS")
+    }
     
     stages {
         // stage('Checkout') {
@@ -15,6 +19,9 @@ pipeline {
 
         stage('Initialise terraform') {
             steps {
+                script {
+                    echo "${params.DEPLOY_OPTIONS}"
+                }
                 sh '''
                 cd dev
                 terraform init
@@ -23,6 +30,9 @@ pipeline {
         }
         
         stage('Terraform Plan') {
+            when {
+                expression  { params.DEPLOY_OPTIONS == 'INFRA' || params.DEPLOY_OPTIONS == 'ALL' }
+            }
             steps {
                 sh '''
                 cd dev
@@ -32,6 +42,9 @@ pipeline {
         }
         
         stage('Terraform Apply') {
+            when {
+                expression  { params.DEPLOY_OPTIONS == 'INFRA' || params.DEPLOY_OPTIONS == 'ALL' }
+            }
             steps {
                 sh '''
                 cd dev
@@ -41,6 +54,9 @@ pipeline {
         }
 
         stage('Manage Nginx') {
+            when {
+                expression  { params.DEPLOY_OPTIONS == 'APPS' || params.DEPLOY_OPTIONS == 'ALL' }
+            }
             environment {
                 NGINX_NODE2 = sh(script: "cd dev; terraform output  |  grep nginx_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
             }
@@ -58,6 +74,9 @@ pipeline {
         }
 
         stage('Manage Python') {
+            when {
+                expression  { params.DEPLOY_OPTIONS == 'APPS' || params.DEPLOY_OPTIONS == 'ALL' }
+            }
             environment {
                 PYTHON_NODE = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
             }
@@ -67,8 +86,9 @@ pipeline {
                         sh """
                         env
                         cd dev
-                        ssh -o StrictHostKeyChecking=no ec2-user@${PYTHON_NODE} 'sudo yum update -y && sudo yum install python3 -y'
-                        scp -o StrictHostKeyChecking=no ../hello.py ec2-user@${PYTHON_NODE}:/tmp/hello.py
+                        scp -o StrictHostKeyChecking=no ../python.service ec2-user@${PYTHON_NODE}:/tmp
+                        scp -o StrictHostKeyChecking=no ../hello.py ec2-user@${PYTHON_NODE}:/tmp
+                        ssh -o StrictHostKeyChecking=no ec2-user@${PYTHON_NODE} 'sudo yum update -y; sudo yum install python3 -y; sudo cp /tmp/python.service /etc/systemd/system; sudo systemctl daemon-reload; sudo systemctl restart python.service'
                         """
                     }
                 }

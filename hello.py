@@ -5,6 +5,23 @@ import threading
 HOST = '0.0.0.0'  # Localhost
 PORT = 65432        # Port to listen on (use any free port number)
 
+
+
+def test_code1():
+  """ this is just a vanilla test """
+  print ("test_code1() successfully executed")
+
+
+def test_code2():
+  """ this is just a vanilla test """
+  print ("test_code2() successfully executed")
+
+
+def test_code3():
+  """ this is just a vanilla test """
+  assert 4>5
+   
+
 def handle_client(conn, addr):
     """Handle communication with a connected client."""
     print(f"Connected by {addr}")
@@ -28,7 +45,7 @@ Content-Type: text/html
 
 <html>
     <body>
-        <h1>Your Message:</h1>
+        <h1>Hello there, here's your message:</h1>
         <p>{message}</p>
     </body>
 </html>
@@ -40,8 +57,10 @@ Content-Type: text/html
       except:
        pass
 
-# Create a socket object
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
+if __name__ == "__main__":
+
+  # Create a socket object
+  with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
     # Bind the socket to the address and port
     server_socket.bind((HOST, PORT))
     # Enable the server to accept connections
