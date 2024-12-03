@@ -169,7 +169,11 @@ pipeline {
             echo "Always clean up"
             script {
                 sh '''
+                echo "Before cleanup, workspace contents:"
+                ls -al
                 rm -rf workspace/*
+                echo "After cleanup, workspace contents:"
+                ls -al
                 echo "Workspace cleaned up successfully"
                 '''
             }
