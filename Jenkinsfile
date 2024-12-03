@@ -171,7 +171,7 @@ pipeline {
                 sh '''
                 echo "Before cleanup, workspace contents:"
                 ls -al
-                rm -rf workspace/*
+                rm -rf *
                 echo "After cleanup, workspace contents:"
                 ls -al
                 echo "Workspace cleaned up successfully"
