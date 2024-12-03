@@ -146,7 +146,7 @@ pipeline {
                     curl -X POST \
                     -H 'Authorization: Bearer ${SLACK_ID}' \
                     -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline successful, On to the next!"}'  \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline successful"}'  \
                     https://slack.com//api/chat.postMessage 
                     """    
                 }
