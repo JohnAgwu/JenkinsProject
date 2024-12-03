@@ -77,7 +77,7 @@ pipeline {
                         sh """
                         env
                         cd dev
-                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'sudo yum update -y && sudo yum install git -y && sudo yum install nginx -y && sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && sudo sed -i "/location \\/hello/ a    proxy_pass http://${PYTHON_NODE}:65432;" /etc/nginx/nginx.conf && sudo systemctl start nginx && sudo systemctl enable nginx'
+                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'sudo yum update -y && sudo yum install git -y && sudo yum install nginx -y && sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && sudo sed -i "/location \\/hello/ a \n   proxy_pass http://${PYTHON_NODE}:65432;" /etc/nginx/nginx.conf && sudo systemctl start nginx && sudo systemctl enable nginx'
                         """
                     }
                 }
