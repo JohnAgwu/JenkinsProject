@@ -138,34 +138,34 @@ pipeline {
     }
 
     post {
-        // success {
-        //     echo  "pipeline has succeeded"
-        //     script {
-        //         withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-        //             sh """
-        //             curl -X POST \
-        //             -H 'Authorization: Bearer ${SLACK_ID}' \
-        //             -H 'Content-Type: application/json' \
-        //             --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline successful, On to the next!"}'  \
-        //             https://slack.com//api/chat.postMessage 
-        //             """    
-        //         }
-        //     }
-        // }
-        // failure  {
-        //     echo  "pipeline has succeeded"
-        //     script {
-        //         withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-        //             sh """
-        //             curl -X POST \
-        //             -H 'Authorization: Bearer ${SLACK_ID}' \
-        //             -H 'Content-Type: application/json' \
-        //             --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline failed, Debug!!"}'  \
-        //             https://slack.com//api/chat.postMessage 
-        //             """    
-        //         }
-        //     }
-        // }
+        success {
+            echo  "pipeline has succeeded"
+            script {
+                withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+                    sh """
+                    curl -X POST \
+                    -H 'Authorization: Bearer ${SLACK_ID}' \
+                    -H 'Content-Type: application/json' \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline successful, On to the next!"}'  \
+                    https://slack.com//api/chat.postMessage 
+                    """    
+                }
+            }
+        }
+        failure  {
+            echo  "pipeline has succeeded"
+            script {
+                withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+                    sh """
+                    curl -X POST \
+                    -H 'Authorization: Bearer ${SLACK_ID}' \
+                    -H 'Content-Type: application/json' \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline failed, Debug!!"}'  \
+                    https://slack.com//api/chat.postMessage 
+                    """    
+                }
+            }
+        }
         always {
             echo "Always clean up"
             script {
