@@ -77,7 +77,7 @@ pipeline {
                         sh """
                         env
                         cd dev
-                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'sudo yum update -y && sudo yum install git -y && sudo yum install nginx -y && sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && sudo sed -i "/location /hello/ a\\n    proxy_pass http://${PYTHON_NODE}:65432;" /etc/nginx/nginx.conf && sudo systemctl start nginx && sudo systemctl enable nginx'
+                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'sudo yum update -y && sudo yum install git -y && sudo yum install nginx -y && sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && sudo sed -i "/location \\/hello/ a    proxy_pass http://${PYTHON_NODE}:65432;" /etc/nginx/nginx.conf && sudo systemctl start nginx && sudo systemctl enable nginx'
                         """
                     }
                 }
@@ -137,47 +137,47 @@ pipeline {
         // }
     }
 
-    post {
-        success {
-            echo  "pipeline has succeeded"
-            script {
-                withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-                    sh """
-                    curl -X POST \
-                    -H 'Authorization: Bearer ${SLACK_ID}' \
-                    -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline successful"}'  \
-                    https://slack.com//api/chat.postMessage 
-                    """    
-                }
-            }
-        }
-        failure  {
-            echo  "pipeline has succeeded"
-            script {
-                withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-                    sh """
-                    curl -X POST \
-                    -H 'Authorization: Bearer ${SLACK_ID}' \
-                    -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline failed, Debug!!"}'  \
-                    https://slack.com//api/chat.postMessage 
-                    """    
-                }
-            }
-        }
-        always {
-            echo "Always clean up"
-            script {
-                sh '''
-                echo "Before cleanup, workspace contents:"
-                ls -ltr
-                rm -rf *
-                echo "After cleanup, workspace contents:"
-                ls -ltr
-                echo "Workspace cleaned up successfully"
-                '''
-            }
-        }  
-    }   
+    // post {
+    //     success {
+    //         echo  "pipeline has succeeded"
+    //         script {
+    //             withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+    //                 sh """
+    //                 curl -X POST \
+    //                 -H 'Authorization: Bearer ${SLACK_ID}' \
+    //                 -H 'Content-Type: application/json' \
+    //                 --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline successful"}'  \
+    //                 https://slack.com//api/chat.postMessage 
+    //                 """    
+    //             }
+    //         }
+    //     }
+    //     failure  {
+    //         echo  "pipeline has succeeded"
+    //         script {
+    //             withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+    //                 sh """
+    //                 curl -X POST \
+    //                 -H 'Authorization: Bearer ${SLACK_ID}' \
+    //                 -H 'Content-Type: application/json' \
+    //                 --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline failed, Debug!!"}'  \
+    //                 https://slack.com//api/chat.postMessage 
+    //                 """    
+    //             }
+    //         }
+    //     }
+    //     always {
+    //         echo "Always clean up"
+    //         script {
+    //             sh '''
+    //             echo "Before cleanup, workspace contents:"
+    //             ls -ltr
+    //             rm -rf *
+    //             echo "After cleanup, workspace contents:"
+    //             ls -ltr
+    //             echo "Workspace cleaned up successfully"
+    //             '''
+    //         }
+    //     }  
+    // }   
 }
