@@ -170,10 +170,10 @@ pipeline {
             script {
                 sh '''
                 echo "Before cleanup, workspace contents:"
-                ls -la
+                ls -ltr
                 rm -rf *
                 echo "After cleanup, workspace contents:"
-                ls -la
+                ls -ltr
                 echo "Workspace cleaned up successfully"
                 '''
             }
