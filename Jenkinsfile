@@ -69,8 +69,8 @@ pipeline {
             }
             environment {
                 NGINX_NODE2 = sh(script: "cd dev; terraform output  |  grep nginx_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
-                PYTHON_NODE = sh(script: "cd dev; terraform output  |  grep '^python_machine_public_dns=' | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
-                PYTHON_NODE_2 = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns_2 | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
+                PYTHON_NODE = sh(script: "cd dev; terraform output -raw python_machine_public_dns", returnStdout: true).trim()
+                PYTHON_NODE_2 = sh(script: "cd dev; terraform output -raw python_machine_public_dns_2", returnStdout: true).trim()
             }
             steps {
                 script {
@@ -94,8 +94,8 @@ pipeline {
                 expression  { params.DEPLOY_OPTIONS == 'APPS' || params.DEPLOY_OPTIONS == 'ALL' }
             }
             environment {
-                PYTHON_NODE = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
-                PYTHON_NODE_2 = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns_2 | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
+                PYTHON_NODE = sh(script: "cd dev; terraform output -raw python_machine_public_dns", returnStdout: true).trim()
+                PYTHON_NODE_2 = sh(script: "cd dev; terraform output -raw python_machine_public_dns_2", returnStdout: true).trim()
             }
             steps {
                 script {
