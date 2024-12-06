@@ -70,7 +70,6 @@ pipeline {
             environment {
                 NGINX_NODE2 = sh(script: "cd dev; terraform output  |  grep nginx_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
                 PYTHON_NODE = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
-                PYTHON_NODE2 = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns_2 | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
             }
             steps {
                 script {
@@ -78,23 +77,7 @@ pipeline {
                         sh """
                         env
                         cd dev
-                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} '
-                        sudo yum update -y &&
-                        sudo yum install git -y &&
-                        sudo yum install nginx -y &&
-                        sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf &&
-                        echo "upstream python_backend {
-                            server ${PYTHON_NODE_1}:65432;
-                            server ${PYTHON_NODE2}:65432;
-                        }
-                        server {
-                            listen 8080;
-                            location /hello {
-                                proxy_pass http://python_backend;
-                            }
-                        }" | sudo tee /etc/nginx/conf.d/load_balancer.conf &&
-                        sudo systemctl restart nginx &&
-                        sudo systemctl enable nginx'
+                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'sudo yum update -y && sudo yum install git -y && sudo yum install nginx -y && sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && sudo sed -i "/location \\/hello/ a \\\n   proxy_pass http://${PYTHON_NODE}:65432;" /etc/nginx/nginx.conf && sudo systemctl start nginx && sudo systemctl enable nginx'
                         """
                     }
                 }
@@ -107,7 +90,6 @@ pipeline {
             }
             environment {
                 PYTHON_NODE = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
-                PYTHON_NODE2 = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns_2 | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
             }
             steps {
                 script {
@@ -118,10 +100,6 @@ pipeline {
                         scp -o StrictHostKeyChecking=no ../python.service ec2-user@${PYTHON_NODE}:/tmp
                         scp -o StrictHostKeyChecking=no ../hello.py ec2-user@${PYTHON_NODE}:/tmp
                         ssh -o StrictHostKeyChecking=no ec2-user@${PYTHON_NODE} 'sudo yum update -y; sudo yum install python3 -y; sudo cp /tmp/python.service /etc/systemd/system; sudo systemctl daemon-reload; sudo systemctl restart python.service'
-
-                        scp -o StrictHostKeyChecking=no ../python.service ec2-user@${PYTHON_NODE2}:/tmp
-                        scp -o StrictHostKeyChecking=no ../hello.py ec2-user@${PYTHON_NODE2}:/tmp
-                        ssh -o StrictHostKeyChecking=no ec2-user@${PYTHON_NODE2} 'sudo yum update -y; sudo yum install python3 -y; sudo cp /tmp/python.service /etc/systemd/system; sudo systemctl daemon-reload; sudo systemctl restart python.service'
                         """
                     }
                 }
