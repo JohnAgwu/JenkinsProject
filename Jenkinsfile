@@ -74,6 +74,9 @@ pipeline {
             }
             steps {
                 script {
+                    sh "echo NGINX_NODE2: ${NGINX_NODE2}"
+                    sh "echo PYTHON_NODE: ${PYTHON_NODE}"
+                    sh "echo PYTHON_NODE_2: ${PYTHON_NODE_2}"
                     sshagent (credentials : ['SSH-TO-TERRA-Nodes']) {
                         sh """
                         env
