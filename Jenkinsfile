@@ -78,7 +78,18 @@ pipeline {
                         sh """
                         env
                         cd dev
-                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'sudo yum update -y && sudo yum install git -y && sudo yum install nginx -y && sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && echo "upstream python_backend { server ${PYTHON_NODE}:65432; server ${PYTHON_NODE_2}:65432; } server { listen 8080; location /hello { proxy_pass http://python_backend; } }" | sudo tee /etc/nginx/conf.d/load_balancer.conf && sudo systemctl restart nginx && sudo systemctl enable nginx'
+                        ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'sudo yum update -y && sudo yum install git -y && sudo yum install nginx -y && sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && 
+                        echo "upstream python_backend { 
+                            server ${PYTHON_NODE}:65432; 
+                            server ${PYTHON_NODE_2}:65432; 
+                        }   
+                        
+                        server {
+                            listen 8080; 
+                            location /hello { 
+                                proxy_pass http://python_backend; 
+                            } 
+                        }" | sudo tee /etc/nginx/conf.d/load_balancer.conf && sudo systemctl restart nginx && sudo systemctl enable nginx'
                         """
                     }
                 }
