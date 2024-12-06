@@ -18,9 +18,9 @@ module "python-machine" {
 module "python-machine2" {
   source         = "../my-module"
   node_name      = var.node3
-  sg_name        = var.node2-sg-name
-  ingress_port_1 = var.node2-port-1 //from 22
-  ingress_port_2 = var.node2-port-2 //to 65432
+  sg_name        = var.node3-sg-name
+  ingress_port_1 = var.node3-port-1 //from 22
+  ingress_port_2 = var.node3-port-2 //to 65432
   ingress_port_3 = var.node1-port-3 //to 8080
 }
 

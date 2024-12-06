@@ -10,3 +10,6 @@ variable "node2-port-1" {}
 variable "node2-port-2" {}
 
 variable "node3" {}
+variable "node3-sg-name" {}
+variable "node3-port-1" {}
+variable "node3-port-2" {}
