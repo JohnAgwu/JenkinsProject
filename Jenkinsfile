@@ -69,7 +69,7 @@ pipeline {
             }
             environment {
                 NGINX_NODE2 = sh(script: "cd dev; terraform output  |  grep nginx_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
-                PYTHON_NODE = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
+                PYTHON_NODE = sh(script: "cd dev; terraform output  |  grep '^python_machine_public_dns=' | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
                 PYTHON_NODE_2 = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns_2 | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
             }
             steps {
