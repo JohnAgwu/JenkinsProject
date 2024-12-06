@@ -1,4 +1,4 @@
-resource "aws_security_group" "some-rule" {
+resource "aws_security_group" "projectsg" {
   name = var.sg_name
   vpc_id = aws_vpc.main.id
   egress  {
