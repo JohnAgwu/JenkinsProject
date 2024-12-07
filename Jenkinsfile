@@ -14,16 +14,18 @@ pipeline {
         choice (choices: "ALL\nINFRA\nAPPS", description: " this is to manage pipeline steps", name: "DEPLOY_OPTIONS")
     }
     
-    options {
-        script {
-            withCredentials([string(credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-                sh """
-                curl -X POST \
-                -H 'Authorization: Bearer ${SLACK_ID}' \
-                -H 'Content-Type: application/json' \
-                --data '{"channel": "devops-masterclass-2024", "text" : "Code pushed to Github! Pipeline running..."}' \
-                https://slack.com/api/chat.postMessage
-                """
+    post {
+        started {
+            script {
+                withCredentials([string(credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+                    sh """
+                    curl -X POST \
+                    -H 'Authorization: Bearer ${SLACK_ID}' \
+                    -H 'Content-Type: application/json' \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Code pushed to Github! Pipeline running..."}'  \
+                    https://slack.com/api/chat.postMessage 
+                    """
+                }
             }
         }
     }
