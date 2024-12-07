@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    triggers {
+        githubPush()
+    }
+
     environment {
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
@@ -149,47 +153,47 @@ pipeline {
         // }
     }
 
-    // post {
-    //     success {
-    //         echo  "pipeline has succeeded"
-    //         script {
-    //             withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-    //                 sh """
-    //                 curl -X POST \
-    //                 -H 'Authorization: Bearer ${SLACK_ID}' \
-    //                 -H 'Content-Type: application/json' \
-    //                 --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline successful"}'  \
-    //                 https://slack.com//api/chat.postMessage 
-    //                 """    
-    //             }
-    //         }
-    //     }
-    //     failure  {
-    //         echo  "pipeline has succeeded"
-    //         script {
-    //             withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-    //                 sh """
-    //                 curl -X POST \
-    //                 -H 'Authorization: Bearer ${SLACK_ID}' \
-    //                 -H 'Content-Type: application/json' \
-    //                 --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline failed, Debug!!"}'  \
-    //                 https://slack.com//api/chat.postMessage 
-    //                 """    
-    //             }
-    //         }
-    //     }
-    //     always {
-    //         echo "Always clean up"
-    //         script {
-    //             sh '''
-    //             echo "Before cleanup, workspace contents:"
-    //             ls -ltr
-    //             rm -rf *
-    //             echo "After cleanup, workspace contents:"
-    //             ls -ltr
-    //             echo "Workspace cleaned up successfully"
-    //             '''
-    //         }
-    //     }  
-    // }   
+    post {
+        success {
+            echo  "pipeline has succeeded"
+            script {
+                withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+                    sh """
+                    curl -X POST \
+                    -H 'Authorization: Bearer ${SLACK_ID}' \
+                    -H 'Content-Type: application/json' \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline auto-build successful"}'  \
+                    https://slack.com//api/chat.postMessage 
+                    """    
+                }
+            }
+        }
+        failure  {
+            echo  "pipeline has failed"
+            script {
+                withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+                    sh """
+                    curl -X POST \
+                    -H 'Authorization: Bearer ${SLACK_ID}' \
+                    -H 'Content-Type: application/json' \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline auto-build failed, Debug!!"}'  \
+                    https://slack.com//api/chat.postMessage 
+                    """    
+                }
+            }
+        }
+        always {
+            echo "Always clean up"
+            script {
+                sh '''
+                echo "Before cleanup, workspace contents:"
+                ls -ltr
+                rm -rf *
+                echo "After cleanup, workspace contents:"
+                ls -ltr
+                echo "Workspace cleaned up successfully"
+                '''
+            }
+        }  
+    }   
 }
