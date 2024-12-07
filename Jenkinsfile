@@ -116,25 +116,27 @@ pipeline {
             }
         }
 
-        // stage('Run Tests') {
-        //     when {
-        //         expression { params.DEPLOY_OPTIONS == 'APPS' || params.DEPLOY_OPTIONS == 'ALL' }
-        //     }
-        //     environment {
-        //         PYTHON_NODE = sh(script: "cd dev; terraform output  |  grep python_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
-        //     }
-        //     steps {
-        //         script {
-        //             sshagent (credentials: ['SSH-TO-TERRA-Nodes']) {
-        //                 sh """
-        //                 env
-        //                 cd dev
-        //                 ssh -o StrictHostKeyChecking=no ec2-user@${PYTHON_NODE} 'sudo yum install -y python3-pip && pip3 install pytest && pytest /tmp/hello.py'
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Run Tests') {
+            when {
+                expression { params.DEPLOY_OPTIONS == 'APPS' || params.DEPLOY_OPTIONS == 'ALL' }
+            }
+            environment {
+                PYTHON_NODE = sh(script: "cd dev; terraform output -raw python_machine_public_dns", returnStdout: true).trim()
+                PYTHON_NODE_2 = sh(script: "cd dev; terraform output -raw python_machine_public_dns_2", returnStdout: true).trim()
+            }
+            steps {
+                script {
+                    sshagent (credentials: ['SSH-TO-TERRA-Nodes']) {
+                        sh """
+                        env
+                        cd dev
+                        ssh -o StrictHostKeyChecking=no ec2-user@${PYTHON_NODE} 'sudo yum install -y python3-pip && pip3 install pytest && pytest /tmp/hello.py'
+                        ssh -o StrictHostKeyChecking=no ec2-user@${PYTHON_NODE_2} 'sudo yum install -y python3-pip && pip3 install pytest && pytest /tmp/hello.py'
+                        """
+                    }
+                }
+            }
+        }
     
 
         // stage('Terraform Destroy') {
@@ -156,7 +158,7 @@ pipeline {
                     curl -X POST \
                     -H 'Authorization: Bearer ${SLACK_ID}' \
                     -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline successful"}'  \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline successful"}'  \
                     https://slack.com//api/chat.postMessage 
                     """    
                 }
@@ -170,7 +172,7 @@ pipeline {
                     curl -X POST \
                     -H 'Authorization: Bearer ${SLACK_ID}' \
                     -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Project 10 Pipeline failed, Debug!!"}'  \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline failed, Debug!!"}'  \
                     https://slack.com//api/chat.postMessage 
                     """    
                 }
