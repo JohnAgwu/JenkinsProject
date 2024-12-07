@@ -13,22 +13,6 @@ pipeline {
     parameters {
         choice (choices: "ALL\nINFRA\nAPPS", description: " this is to manage pipeline steps", name: "DEPLOY_OPTIONS")
     }
-    
-    post {
-        started {
-            script {
-                withCredentials([string(credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-                    sh """
-                    curl -X POST \
-                    -H 'Authorization: Bearer ${SLACK_ID}' \
-                    -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Code pushed to Github! Pipeline running..."}'  \
-                    https://slack.com/api/chat.postMessage 
-                    """
-                }
-            }
-        }
-    }
 
     stages {
         // stage('Checkout') {
@@ -36,6 +20,22 @@ pipeline {
         //         git branch: 'main', url: 'https://github.com/JohnAgwu/JenkinsProject.git'
         //     }
         // }
+
+        stage('Notify Start') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+                        sh """
+                        curl -X POST \
+                        -H 'Authorization: Bearer ${SLACK_ID}' \
+                        -H 'Content-Type: application/json' \
+                        --data '{"channel": "devops-masterclass-2024","text" : "Code pushed to Github! Pipeline running..."}'  \
+                        https://slack.com/api/chat.postMessage 
+                        """
+                    }
+                }
+            }
+        }
 
         stage('Initialise terraform') {
             steps {
