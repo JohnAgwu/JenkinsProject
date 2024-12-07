@@ -74,15 +74,15 @@ pipeline {
             }
             steps {
                 script {
-                    sh "echo NGINX_NODE2: ${NGINX_NODE2}"
-                    sh "echo PYTHON_NODE: ${PYTHON_NODE}"
-                    sh "echo PYTHON_NODE_2: ${PYTHON_NODE_2}"
+                    // sh "echo NGINX_NODE2: ${NGINX_NODE2}"
+                    // sh "echo PYTHON_NODE: ${PYTHON_NODE}"
+                    // sh "echo PYTHON_NODE_2: ${PYTHON_NODE_2}"
                     sshagent (credentials : ['SSH-TO-TERRA-Nodes']) {
                         sh """
                         env
                         cd dev
                         ssh -o StrictHostKeyChecking=no ec2-user@${NGINX_NODE2} 'sudo yum update -y && sudo yum install git -y && sudo yum install nginx -y && sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && 
-                        echo \"upstream python_backend { server ${PYTHON_NODE}:65432; server ${PYTHON_NODE_2}:65432; } server { listen 8080; location /hello { proxy_pass http://python_backend; } }\" | sudo tee /etc/nginx/conf.d/load_balancer.conf && sudo systemctl restart nginx && sudo systemctl enable nginx'
+                        echo \"upstream python_backend { server ${PYTHON_NODE}:65432; server ${PYTHON_NODE_2}:65432; } server { listen 80; server_name ${NGINX_NODE2}; location / { proxy_pass http://python_backend; } location /python2 { proxy_pass http://${PYTHON_NODE_2}:65432; } }\" | sudo tee /etc/nginx/conf.d/load_balancer.conf && sudo systemctl restart nginx && sudo systemctl enable nginx'
                         """
                     }
                 }
@@ -149,47 +149,47 @@ pipeline {
         // }
     }
 
-    post {
-        success {
-            echo  "pipeline has succeeded"
-            script {
-                withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-                    sh """
-                    curl -X POST \
-                    -H 'Authorization: Bearer ${SLACK_ID}' \
-                    -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline successful"}'  \
-                    https://slack.com//api/chat.postMessage 
-                    """    
-                }
-            }
-        }
-        failure  {
-            echo  "pipeline has succeeded"
-            script {
-                withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
-                    sh """
-                    curl -X POST \
-                    -H 'Authorization: Bearer ${SLACK_ID}' \
-                    -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline failed, Debug!!"}'  \
-                    https://slack.com//api/chat.postMessage 
-                    """    
-                }
-            }
-        }
-        always {
-            echo "Always clean up"
-            script {
-                sh '''
-                echo "Before cleanup, workspace contents:"
-                ls -ltr
-                rm -rf *
-                echo "After cleanup, workspace contents:"
-                ls -ltr
-                echo "Workspace cleaned up successfully"
-                '''
-            }
-        }  
-    }   
+    // post {
+    //     success {
+    //         echo  "pipeline has succeeded"
+    //         script {
+    //             withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+    //                 sh """
+    //                 curl -X POST \
+    //                 -H 'Authorization: Bearer ${SLACK_ID}' \
+    //                 -H 'Content-Type: application/json' \
+    //                 --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline successful"}'  \
+    //                 https://slack.com//api/chat.postMessage 
+    //                 """    
+    //             }
+    //         }
+    //     }
+    //     failure  {
+    //         echo  "pipeline has succeeded"
+    //         script {
+    //             withCredentials ([string (credentialsId: 'SLACK_TOKEN', variable: 'SLACK_ID')]) {
+    //                 sh """
+    //                 curl -X POST \
+    //                 -H 'Authorization: Bearer ${SLACK_ID}' \
+    //                 -H 'Content-Type: application/json' \
+    //                 --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline failed, Debug!!"}'  \
+    //                 https://slack.com//api/chat.postMessage 
+    //                 """    
+    //             }
+    //         }
+    //     }
+    //     always {
+    //         echo "Always clean up"
+    //         script {
+    //             sh '''
+    //             echo "Before cleanup, workspace contents:"
+    //             ls -ltr
+    //             rm -rf *
+    //             echo "After cleanup, workspace contents:"
+    //             ls -ltr
+    //             echo "Workspace cleaned up successfully"
+    //             '''
+    //         }
+    //     }  
+    // }   
 }
