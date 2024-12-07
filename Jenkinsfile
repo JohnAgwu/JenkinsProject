@@ -162,7 +162,7 @@ pipeline {
                     curl -X POST \
                     -H 'Authorization: Bearer ${SLACK_ID}' \
                     -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline auto-build successful"}'  \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline auto-build test successful"}'  \
                     https://slack.com//api/chat.postMessage 
                     """    
                 }
@@ -176,7 +176,7 @@ pipeline {
                     curl -X POST \
                     -H 'Authorization: Bearer ${SLACK_ID}' \
                     -H 'Content-Type: application/json' \
-                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline auto-build failed, Debug!!"}'  \
+                    --data '{"channel": "devops-masterclass-2024","text" : "Project 11 Pipeline auto-build test failed, Debug!!"}'  \
                     https://slack.com//api/chat.postMessage 
                     """    
                 }
