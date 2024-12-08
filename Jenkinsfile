@@ -121,7 +121,7 @@ pipeline {
                                 ssl_certificate_key /etc/letsencrypt/live/yutars.com/privkey.pem;
 
                                 location / {
-                                    proxy_pass http://python_backend; 
+                                    proxy_pass http://${PYTHON_NODE}:65432; 
                                 }
                                 location /python2 {
                                     proxy_pass http://${PYTHON_NODE_2}:65432;
