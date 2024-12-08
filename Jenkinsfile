@@ -114,7 +114,7 @@ pipeline {
                             }
                             server {
                                 listen 80; 
-                                server_name ${NGINX_NODE2};
+                                server_name yutars.com;
                                 location / {
                                     proxy_pass http://python_backend; 
                                 }
@@ -124,7 +124,7 @@ pipeline {
                             }\" | sudo tee /etc/nginx/conf.d/load_balancer.conf && 
 
                             sudo dnf install -y certbot python3-certbot-nginx &&
-                            sudo certbot --nginx -d ${NGINX_NODE2} --non-interactive --agree-tos -m agujohnifeanyi69@gmail.com &&
+                            sudo certbot --nginx -d yutars.com --non-interactive --agree-tos -m agujohnifeanyi69@gmail.com &&
 
 
                             sudo systemctl restart nginx && 
