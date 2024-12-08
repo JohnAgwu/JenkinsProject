@@ -123,6 +123,8 @@ pipeline {
                                 }
                             }\" | sudo tee /etc/nginx/conf.d/load_balancer.conf && 
 
+                            sudo dnf install amazon-linux-extras -y &&
+                            sudo amazon-linux-extras enable epel &&
                             sudo dnf install -y epel-release &&
                             sudo dnf install -y certbot python3-certbot-nginx &&
                             sudo certbot --nginx -d ${NGINX_NODE2} --non-interactive --agree-tos -m agujohnifeanyi69@gmail.com &&
