@@ -121,7 +121,7 @@ pipeline {
                             location /python2 {
                                 proxy_pass http://${PYTHON_NODE_2}:65432;
                             }
-                        // }\" | sudo tee /etc/nginx/conf.d/load_balancer.conf && 
+                        }\" | sudo tee /etc/nginx/conf.d/load_balancer.conf && 
                         sudo systemctl restart nginx && sudo systemctl enable nginx'
                         """
                     }
