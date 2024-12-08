@@ -113,8 +113,13 @@ pipeline {
                                 server ${PYTHON_NODE_2}:65432; 
                             }
                             server {
-                                listen 80; 
+                                listen 80;
+                                listen 443 ssl;
                                 server_name yutars.com;
+
+                                ssl_certificate /etc/letsencrypt/live/yutars.com/fullchain.pem;
+                                ssl_certificate_key /etc/letsencrypt/live/yutars.com/privkey.pem;
+
                                 location / {
                                     proxy_pass http://python_backend; 
                                 }
