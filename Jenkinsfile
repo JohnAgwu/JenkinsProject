@@ -114,7 +114,8 @@ pipeline {
                             }
                             server {
                                 listen 80;
-                                listen 443 ssl;
+                                listen 443 ssl http2;
+                                listen [::]:443 ssl http2;
                                 server_name yutars.com;
 
                                 ssl_certificate /etc/letsencrypt/live/yutars.com/fullchain.pem;
