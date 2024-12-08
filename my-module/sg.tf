@@ -19,8 +19,7 @@ resource "aws_security_group" "projectsg" {
     from_port = var.ingress_port_2
     to_port = var.ingress_port_2
     protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    cidr_blocks = [var.nginx_private_cidr]
   }
 
   ingress  {
@@ -34,8 +33,7 @@ resource "aws_security_group" "projectsg" {
     from_port = var.ingress_port_4
     to_port = var.ingress_port_4
     protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    cidr_blocks = [var.nginx_private_cidr]
   }
 
 }
