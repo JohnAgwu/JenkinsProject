@@ -114,9 +114,6 @@ pipeline {
                             }
                             server {
                                 listen 80;
-                                listen 443 ssl http2;
-                                listen [::]:443 ssl http2;
-                                server_name yutars.com;
 
                                 location / {
                                     proxy_pass http://${PYTHON_NODE}:65432; 

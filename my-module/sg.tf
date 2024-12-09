@@ -31,12 +31,4 @@ resource "aws_security_group" "projectsg" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  ingress  {
-    from_port = var.ingress_port_4
-    to_port = var.ingress_port_4
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
 }
