@@ -112,8 +112,20 @@ pipeline {
                                 server ${PYTHON_NODE}:65432; 
                                 server ${PYTHON_NODE_2}:65432; 
                             }
+
                             server {
                                 listen 80;
+                                server_name yutars.com
+
+                                location /hello {
+                                    proxy_pass http://${PYTHON_NODE}:65432; 
+                                }
+                                location /python2 {
+                                    proxy_pass http://${PYTHON_NODE_2}:65432;
+                                }
+                            } 
+
+                            server {
                                 listen 8080;
                                 server_name yutars.com
 
