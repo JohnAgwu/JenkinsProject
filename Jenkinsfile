@@ -115,6 +115,7 @@ pipeline {
                             server {
                                 listen 80;
                                 listen 8080;
+                                server_name yutars.com
 
                                 location /hello {
                                     proxy_pass http://${PYTHON_NODE}:65432; 
