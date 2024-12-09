@@ -105,8 +105,9 @@ pipeline {
                             sudo yum update -y && 
                             sudo yum install git -y && 
                             sudo yum install nginx -y && 
-                            sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && 
-                            sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && 
+                            # sudo sed -i "s/listen       80;/listen       8080;/g" /etc/nginx/nginx.conf && 
+                            # sudo sed -i "s|location / {|location /hello {|g" /etc/nginx/nginx.conf && 
+                            sudo certbot --nginx -d yutars.com --non-interactive --agree-tos --email agujohnifeanyi69@gmail.com &&
 
                             echo \"upstream python_backend {
                                 server ${PYTHON_NODE}:65432; 
@@ -114,8 +115,18 @@ pipeline {
                             }
                             server {
                                 listen 80;
-                                listen 8080;
+                                # listen 8080;
+                                listen 443 ssl http2;
                                 server_name yutars.com;
+                                
+                                ssl_certificate /etc/letsencrypt/live/yutars.com/fullchain.pem;
+                                ssl_certificate_key /etc/letsencrypt/live/yutars.com/privkey.pem;
+                                ssl_trusted_certificate /etc/letsencrypt/live/yutars.com/chain.pem;
+
+                                ssl_protocols TLSv1.2 TLSv1.3;
+                                ssl_ciphers HIGH:!aNULL:!MD5;
+                                ssl_prefer_server_ciphers on;
+                                ssl_session_cache shared:SSL:10m;
 
                                 location /hello {
                                     proxy_pass http://${PYTHON_NODE}:65432; 
