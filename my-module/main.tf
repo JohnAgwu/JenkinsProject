@@ -14,3 +14,7 @@ resource "aws_instance" "app_node" {
 output "public_dns" {
     value       = aws_instance.app_node.public_dns
 }
+
+output "private_ip" {
+    value       = aws_instance.app_node.private_ip
+}
