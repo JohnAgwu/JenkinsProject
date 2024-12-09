@@ -19,7 +19,7 @@ module "python-machine" {
   ingress_port_2       = var.node2-port-2 //to 65432
   ingress_port_3       = var.node2-port-3 //to 8080
   ingress_port_4       = var.node2-port-4 //to 443
-  nginx_private_cidr_1 = "10.0.1.0/24"
+  nginx_private_cidr_1 = "0.0.0.0/0"
   nginx_private_cidr_2 = "10.0.1.0/24"
   nginx_private_cidr_3 = "10.0.1.0/24"
   nginx_private_cidr_4 = "10.0.1.0/24"
@@ -33,7 +33,7 @@ module "python-machine2" {
   ingress_port_2       = var.node3-port-2 //to 65432
   ingress_port_3       = var.node3-port-3 //to 8080
   ingress_port_4       = var.node3-port-4 //to 443
-  nginx_private_cidr_1 = "10.0.1.0/24"
+  nginx_private_cidr_1 = "0.0.0.0/0"
   nginx_private_cidr_2 = "10.0.1.0/24"
   nginx_private_cidr_3 = "10.0.1.0/24"
   nginx_private_cidr_4 = "10.0.1.0/24"
