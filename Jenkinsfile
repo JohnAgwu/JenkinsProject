@@ -118,9 +118,6 @@ pipeline {
                                 listen [::]:443 ssl http2;
                                 server_name yutars.com;
 
-                                ssl_certificate /etc/letsencrypt/live/yutars.com/fullchain.pem;
-                                ssl_certificate_key /etc/letsencrypt/live/yutars.com/privkey.pem;
-
                                 location / {
                                     proxy_pass http://${PYTHON_NODE}:65432; 
                                 }
@@ -128,10 +125,6 @@ pipeline {
                                     proxy_pass http://${PYTHON_NODE_2}:65432;
                                 }
                             }\" | sudo tee /etc/nginx/conf.d/load_balancer.conf && 
-
-                            sudo dnf install -y certbot python3-certbot-nginx &&
-                            sudo certbot --nginx -d yutars.com --non-interactive --agree-tos -m agujohnifeanyi69@gmail.com &&
-
 
                             sudo systemctl restart nginx && 
                             sudo systemctl enable nginx
