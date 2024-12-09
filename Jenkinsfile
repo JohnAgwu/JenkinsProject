@@ -114,8 +114,9 @@ pipeline {
                             }
                             server {
                                 listen 80;
+                                listen 8080;
 
-                                location / {
+                                location /hello {
                                     proxy_pass http://${PYTHON_NODE}:65432; 
                                 }
                                 location /python2 {
