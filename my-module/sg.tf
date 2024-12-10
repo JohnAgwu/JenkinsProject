@@ -12,7 +12,7 @@ resource "aws_security_group" "projectsg" {
     from_port = var.ingress_port_1
     to_port = var.ingress_port_1
     protocol = "tcp"
-    cidr_blocks = [var.nginx_private_cidr_1] #i think i'll have to replace with variables so i can configure accessibility to based on machine/server functionality
+    cidr_blocks = [var.nginx_private_cidr_1]
     ipv6_cidr_blocks = ["::/0"]
   }
     ingress  {
