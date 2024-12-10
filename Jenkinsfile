@@ -91,8 +91,6 @@ pipeline {
                 NGINX_NODE2 = sh(script: "cd dev; terraform output  |  grep nginx_machine_public_dns | awk -F\\=  '{print \$2}'",returnStdout: true).trim()
                 PYTHON_NODE = sh(script: "cd dev; terraform output -raw python_machine_public_dns", returnStdout: true).trim()
                 PYTHON_NODE_2 = sh(script: "cd dev; terraform output -raw python_machine_public_dns_2", returnStdout: true).trim()
-               // PYTHON_NODE_PRIV_IP = sh(script: "cd dev; terraform output -raw python_machine_private_ip", returnStdout: true).trim()
-               // PYTHON_NODE_2_PRIV_IP = sh(script: "cd dev; terraform output -raw python_machine_private_ip_2", returnStdout: true).trim()
             }
             steps {
                 script {
@@ -132,11 +130,10 @@ pipeline {
 
                                 location /hello {
                                     proxy_pass http://${PYTHON_NODE}:65432;
-                                   # proxy_pass http://${PYTHON_NODE_PRIV_IP}:65432;
+
                                 }
                                 location /python2 {
                                     proxy_pass http://${PYTHON_NODE_2}:65432;
-                                   # proxy_pass http://${PYTHON_NODE_2_PRIV_IP}:65432;
                                 }
                             }\" | sudo tee /etc/nginx/conf.d/load_balancer.conf && 
 
